@@ -1,0 +1,316 @@
+---
+description: Coding standards and best practices for the project
+alwaysApply: true
+---
+
+# Coding Standards
+
+This document outlines coding standards and best practices for this template project.
+
+## TypeScript Standards
+
+### Type Safety
+- **Always use explicit types** - Avoid `any` unless absolutely necessary
+- **Use type inference** when types are obvious from context
+- **Define interfaces** for component props and function parameters
+- **Use type guards** for runtime type checking
+- **Generate Supabase types** regularly: `npx supabase gen types typescript`
+
+### Type Definitions
+```tsx
+// ✅ Good: Explicit types
+interface UserProfileProps {
+  userId: string
+  onUpdate?: (user: User) => void
+}
+
+// ❌ Bad: Using any
+function processData(data: any) { }
+
+// ✅ Good: Proper typing
+function processData(data: UserData) { }
+```
+
+### Type Imports
+```tsx
+// ✅ Good: Type-only imports
+import type { User } from '@/types'
+import type { ComponentProps } from 'react'
+
+// ✅ Good: Mixed imports
+import { useState, type FC } from 'react'
+```
+
+## React/Next.js Standards
+
+### Component Patterns
+- **Use Server Components by default** - Only add `'use client'` when needed
+- **Extract client logic** to separate client components when possible
+- **Use proper async/await** in Server Components
+- **Handle loading and error states** appropriately
+
+### Server Component Example
+```tsx
+// ✅ Good: Server Component
+import { createClient } from '@/lib/server'
+
+export default async function UserPage({ params }: { params: { id: string } }) {
+  const supabase = await createClient()
+  const { data } = await supabase.from('users').select('*').eq('id', params.id).single()
+  
+  return <div>{data?.name}</div>
+}
+```
+
+### Client Component Example
+```tsx
+// ✅ Good: Client Component with 'use client'
+'use client'
+
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+
+export function InteractiveButton() {
+  const [count, setCount] = useState(0)
+  
+  return <Button onClick={() => setCount(count + 1)}>Count: {count}</Button>
+}
+```
+
+### Hooks
+- **Custom hooks** should start with `use`
+- **Extract complex logic** into custom hooks
+- **Follow React hooks rules** - only call at top level
+
+```tsx
+// ✅ Good: Custom hook
+export function useAuth() {
+  const [user, setUser] = useState<User | null>(null)
+  // ... logic
+  return { user, signIn, signOut }
+}
+```
+
+## Supabase Standards
+
+### Client Usage
+- **Browser client** (`lib/client.ts`) for client components
+- **Server client** (`lib/server.ts`) for server components and API routes
+- **Never expose service role key** to client code
+- **Always handle errors** from Supabase queries
+
+### Query Patterns
+```tsx
+// ✅ Good: Proper error handling
+const { data, error } = await supabase
+  .from('users')
+  .select('*')
+  .eq('id', userId)
+  .single()
+
+if (error) {
+  console.error('Error fetching user:', error)
+  return null
+}
+
+return data
+```
+
+### RLS Policies
+- **Always enable RLS** on new tables
+- **Create granular policies** - one per operation (SELECT, INSERT, UPDATE, DELETE)
+- **Use proper indexes** on columns used in RLS policies
+- **Test policies** thoroughly
+
+### Migrations
+- **Use descriptive names** with timestamps: `20240101120000_create_users.sql`
+- **Include comments** explaining the migration
+- **Enable RLS** on new tables
+- **Add indexes** for performance
+
+## Styling Standards
+
+### Tailwind CSS
+- **Use utility classes** for styling
+- **Use CSS variables** for theming (defined in `app/globals.css`)
+- **Use `cn()` utility** for conditional classes
+- **Follow mobile-first** responsive design
+
+```tsx
+// ✅ Good: Using cn() for conditional classes
+import { cn } from '@/lib/utils'
+
+<div className={cn(
+  "base-classes",
+  isActive && "active-classes",
+  className
+)} />
+```
+
+### Component Styling
+- **Use shadcn/ui components** as base
+- **Extend components** rather than replacing them
+- **Maintain design consistency** across the app
+
+## Code Organization
+
+### File Structure
+- **One component per file** (unless closely related)
+- **Co-locate related files** (component, styles, tests)
+- **Use index files** for clean directory exports
+- **Group by feature** for feature-specific code
+
+### Import Organization
+1. React/Next.js imports
+2. Third-party library imports
+3. Internal imports (components, lib, hooks, types)
+4. Relative imports
+5. Type-only imports
+
+### Function Organization
+```tsx
+export function Component() {
+  // 1. Hooks
+  const [state, setState] = useState()
+  const router = useRouter()
+  
+  // 2. Effects
+  useEffect(() => {
+    // effect logic
+  }, [])
+  
+  // 3. Handlers
+  const handleClick = () => {
+    // handler logic
+  }
+  
+  // 4. Computed values
+  const computedValue = useMemo(() => {
+    // computation
+  }, [dependencies])
+  
+  // 5. Render
+  return <div>...</div>
+}
+```
+
+## Error Handling
+
+### Client-Side
+```tsx
+// ✅ Good: Proper error handling
+try {
+  const result = await someAsyncOperation()
+  return result
+} catch (error) {
+  console.error('Operation failed:', error)
+  // Show user-friendly error message
+  throw new Error('Failed to complete operation')
+}
+```
+
+### Server-Side
+```tsx
+// ✅ Good: Server error handling
+export async function GET(request: Request) {
+  try {
+    const data = await fetchData()
+    return Response.json(data)
+  } catch (error) {
+    console.error('API error:', error)
+    return Response.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+```
+
+## Performance
+
+### Optimization Techniques
+- **Use Server Components** to reduce client bundle size
+- **Lazy load** heavy components when possible
+- **Optimize images** using Next.js Image component
+- **Use React.memo** for expensive re-renders
+- **Debounce/throttle** frequent operations
+
+### Database Queries
+- **Add indexes** on frequently queried columns
+- **Use select()** to fetch only needed columns
+- **Implement pagination** for large datasets
+- **Cache queries** when appropriate
+
+## Security
+
+### Best Practices
+- **Never expose secrets** in client code
+- **Use RLS policies** for database security
+- **Validate user input** on both client and server
+- **Sanitize data** before displaying
+- **Use HTTPS** in production
+- **Implement proper authentication** checks
+
+### Environment Variables
+- **Never commit** `.env.local` to git
+- **Use `.env.example`** to document required variables
+- **Validate env vars** at application startup
+- **Use different keys** for development and production
+
+## Testing Considerations
+
+### Code Quality
+- **Write testable code** - separate logic from UI
+- **Use descriptive names** for functions and variables
+- **Add comments** for complex logic
+- **Keep functions small** and focused
+
+### Documentation
+- **Document complex functions** with JSDoc
+- **Explain "why" not "what"** in comments
+- **Keep README updated** with setup instructions
+
+## Accessibility
+
+### Standards
+- **Use semantic HTML** elements
+- **Add ARIA labels** when needed
+- **Ensure keyboard navigation** works
+- **Test with screen readers** when possible
+- **Maintain proper color contrast**
+
+```tsx
+// ✅ Good: Accessible component
+<button
+  aria-label="Close dialog"
+  onClick={handleClose}
+>
+  <XIcon aria-hidden="true" />
+</button>
+```
+
+## Git Standards
+
+### Commit Messages
+- **Use descriptive messages**: "Add user authentication flow"
+- **Reference issues**: "Fix #123: Resolve login bug"
+- **Keep commits focused**: One logical change per commit
+
+### Branch Naming
+- `feature/` - New features
+- `fix/` - Bug fixes
+- `refactor/` - Code refactoring
+- `docs/` - Documentation updates
+
+## Code Review Checklist
+
+Before submitting code:
+- [ ] Code follows TypeScript standards
+- [ ] Components use proper Server/Client patterns
+- [ ] Supabase queries have error handling
+- [ ] RLS policies are in place (if applicable)
+- [ ] Styling uses Tailwind utilities
+- [ ] No console.logs in production code
+- [ ] Environment variables are documented
+- [ ] Code builds without errors
+- [ ] No TypeScript errors

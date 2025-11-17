@@ -1,0 +1,263 @@
+---
+description: Project structure and file organization guidelines
+alwaysApply: true
+---
+
+# Project Structure Guidelines
+
+This document outlines the project structure and file organization patterns for this template.
+
+## Directory Structure
+
+```
+.
+├── app/                          # Next.js App Router
+│   ├── (auth)/                  # Route groups (optional)
+│   │   ├── login/
+│   │   └── signup/
+│   ├── api/                     # API routes
+│   │   └── [route]/
+│   │       └── route.ts
+│   ├── [dynamic]/               # Dynamic routes
+│   ├── layout.tsx               # Root layout (required)
+│   ├── page.tsx                 # Home page
+│   ├── loading.tsx              # Loading UI (optional)
+│   ├── error.tsx                # Error UI (optional)
+│   ├── not-found.tsx            # 404 page (optional)
+│   └── globals.css              # Global styles
+│
+├── components/                  # React components
+│   ├── ui/                      # shadcn/ui components (auto-generated)
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   └── ...
+│   ├── layout/                  # Layout components
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   └── Sidebar.tsx
+│   ├── features/                # Feature-specific components
+│   │   └── [feature-name]/
+│   │       ├── FeatureComponent.tsx
+│   │       └── FeatureForm.tsx
+│   └── shared/                  # Shared/reusable components
+│       ├── LoadingSpinner.tsx
+│       └── ErrorMessage.tsx
+│
+├── lib/                         # Utilities and configurations
+│   ├── client.ts                # Supabase browser client
+│   ├── server.ts                # Supabase server client
+│   ├── middleware.ts            # Supabase middleware
+│   ├── utils.ts                 # Utility functions (cn, etc.)
+│   ├── validations/             # Zod schemas (if using)
+│   │   └── schemas.ts
+│   └── constants/               # Constants
+│       └── config.ts
+│
+├── hooks/                       # Custom React hooks
+│   ├── useAuth.ts
+│   ├── useSupabase.ts
+│   └── useLocalStorage.ts
+│
+├── types/                       # TypeScript type definitions
+│   ├── supabase.ts              # Generated Supabase types
+│   ├── database.ts              # Database types
+│   └── index.ts                 # Shared types
+│
+├── .cursor/                     # Cursor IDE configuration
+│   ├── rules/                   # Coding rules
+│   │   ├── component-registry-guide.mdc
+│   │   ├── create-db-functions.mdc
+│   │   ├── create-migration.mdc
+│   │   ├── create-rls-policies.mdc
+│   │   ├── postgres-sql-style-guide.mdc
+│   │   ├── project-structure.mdc
+│   │   ├── use-realtime.mdc
+│   │   └── writing-supabase-edge-functions.mdc
+│   └── mcp.json                 # MCP configuration
+│
+├── supabase/                    # Supabase configuration (if using CLI)
+│   ├── functions/               # Edge Functions
+│   │   └── [function-name]/
+│   │       └── index.ts
+│   ├── migrations/              # Database migrations
+│   │   └── YYYYMMDDHHmmss_description.sql
+│   └── config.toml              # Supabase config
+│
+├── public/                      # Static assets
+│   ├── images/
+│   ├── icons/
+│   └── ...
+│
+├── .env.local                   # Environment variables (gitignored)
+├── .env.example                 # Example environment variables
+├── .gitignore                   # Git ignore rules
+├── .cursorrules                 # Main Cursor rules
+├── .aiderrc                     # Aider configuration
+├── components.json              # shadcn/ui configuration
+├── next.config.ts               # Next.js configuration
+├── package.json                 # Dependencies
+├── pnpm-lock.yaml               # Lock file (pnpm)
+├── tsconfig.json                # TypeScript configuration
+└── README.md                    # Project documentation
+```
+
+## File Naming Conventions
+
+### Components
+- **PascalCase** for component files: `UserProfile.tsx`, `NavigationMenu.tsx`
+- **PascalCase** for component names: `export function UserProfile() {}`
+- **camelCase** for component props interfaces: `interface UserProfileProps {}`
+
+### Utilities
+- **camelCase** for utility files: `formatDate.ts`, `apiClient.ts`
+- **camelCase** for function names: `export function formatDate() {}`
+
+### Pages (Next.js)
+- **lowercase** with Next.js conventions: `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`
+- **Route folders**: lowercase with hyphens: `user-profile/`, `dashboard/`
+
+### Database
+- **snake_case** for tables: `user_profiles`, `order_items`
+- **snake_case** for columns: `user_id`, `created_at`
+- **snake_case** for migrations: `20240101120000_create_users.sql`
+
+### Types
+- **PascalCase** for type/interface names: `User`, `ApiResponse`, `DatabaseUser`
+- **PascalCase** for enum names: `UserRole`, `OrderStatus`
+
+## Import Organization
+
+### Import Order
+1. React and Next.js imports
+2. Third-party library imports
+3. Internal imports (components, lib, hooks, types)
+4. Relative imports
+5. Type-only imports (using `type` keyword)
+
+### Example
+```tsx
+// 1. React/Next.js
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
+// 2. Third-party
+import { createClient } from '@supabase/supabase-js'
+
+// 3. Internal
+import { Button } from '@/components/ui/button'
+import { createClient as createSupabaseClient } from '@/lib/client'
+import { useAuth } from '@/hooks/useAuth'
+
+// 4. Relative
+import { LocalComponent } from './LocalComponent'
+
+// 5. Types
+import type { User } from '@/types'
+```
+
+## Component Organization
+
+### Component Structure
+```tsx
+// 1. Imports
+import { ... } from '...'
+
+// 2. Types/Interfaces
+interface ComponentProps {
+  // props
+}
+
+// 3. Component
+export function Component({ prop }: ComponentProps) {
+  // 4. Hooks
+  const [state, setState] = useState()
+  
+  // 5. Effects
+  useEffect(() => {
+    // effect logic
+  }, [])
+  
+  // 6. Handlers
+  const handleClick = () => {
+    // handler logic
+  }
+  
+  // 7. Render
+  return (
+    <div>
+      {/* JSX */}
+    </div>
+  )
+}
+```
+
+### File Organization Rules
+
+1. **One component per file** (unless closely related)
+2. **Co-locate related files** (component + styles + tests)
+3. **Use index files** for clean imports from directories
+4. **Group by feature** when components are feature-specific
+5. **Shared components** in `components/shared/`
+
+## Best Practices
+
+### File Size
+- Keep files under 300-400 lines when possible
+- Split large components into smaller sub-components
+- Extract complex logic into custom hooks
+
+### Code Organization
+- **Top-level**: Imports and types
+- **Component level**: Component definition
+- **Inside component**: Hooks → Effects → Handlers → Render
+
+### Naming
+- **Descriptive names**: `UserProfileCard` not `Card`
+- **Consistent patterns**: `use[Feature]` for hooks, `[Feature]Form` for forms
+- **Avoid abbreviations**: `UserProfile` not `UsrProf`
+
+### Path Aliases
+Use `@/` alias for imports (configured in `tsconfig.json`):
+- `@/components` → `./components`
+- `@/lib` → `./lib`
+- `@/hooks` → `./hooks`
+- `@/types` → `./types`
+
+## Directory-Specific Guidelines
+
+### `app/` Directory
+- Follow Next.js App Router conventions
+- Use route groups `(group-name)` for organization
+- Place shared layouts in root `layout.tsx`
+- Use `loading.tsx` and `error.tsx` for better UX
+
+### `components/` Directory
+- `ui/`: Auto-generated shadcn components (don't edit directly)
+- `layout/`: Layout-related components
+- `features/`: Feature-specific components
+- `shared/`: Reusable across features
+
+### `lib/` Directory
+- Pure utility functions
+- Configuration files
+- Client/server setup
+- No React components here
+
+### `hooks/` Directory
+- Custom React hooks only
+- Prefix with `use`: `useAuth`, `useSupabase`
+- One hook per file
+
+### `types/` Directory
+- TypeScript type definitions
+- Generated types (like Supabase)
+- Shared type definitions
+
+## Migration Guidelines
+
+When adding new features:
+1. Create feature directory in appropriate location
+2. Follow existing naming conventions
+3. Update imports to use `@/` aliases
+4. Maintain consistent structure
+5. Document any deviations from standard patterns

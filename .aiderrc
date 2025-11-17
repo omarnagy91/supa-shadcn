@@ -1,0 +1,62 @@
+# Aider AI Coding Assistant Configuration
+# This file configures aider to work optimally with this template
+
+# Language settings
+language: typescript,typescriptreact,javascript,javascriptreact
+
+# File patterns to include
+include:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.json"
+  - "**/*.css"
+  - "**/*.md"
+  - "**/*.sql"
+  - "**/*.mdc"
+
+# File patterns to exclude
+exclude:
+  - "node_modules/**"
+  - ".next/**"
+  - ".git/**"
+  - "dist/**"
+  - "build/**"
+  - "*.log"
+  - ".env*"
+  - "pnpm-lock.yaml"
+  - "package-lock.json"
+  - "yarn.lock"
+
+# Project context files (read at start)
+context:
+  - ".cursorrules"
+  - "README.md"
+  - "package.json"
+  - "components.json"
+  - "tsconfig.json"
+  - ".cursor/rules/**/*.mdc"
+
+# Commands to run before/after edits
+# pre_edit:
+#   - "pnpm run lint --fix"
+
+# post_edit:
+#   - "pnpm run build"
+
+# Model settings (if using custom model)
+# model: claude-3-5-sonnet-20241022
+
+# Auto-apply suggestions
+auto_apply: false
+
+# Max file size (bytes)
+max_file_size: 1000000
+
+# Git integration
+git: true
+
+# Commit messages
+commit_message: "Update: {summary}"
+

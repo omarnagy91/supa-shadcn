@@ -1,0 +1,160 @@
+---
+description: Guide for selecting components from available shadcn registries
+alwaysApply: true
+---
+
+# Component Registry Selection Guide
+
+This project has **60+ component registries** configured in `components.json`. This guide helps AI assistants select the best components for different use cases.
+
+## Registry Categories
+
+### Core UI Components
+**Registry**: `@shadcn` (default)
+- **Use for**: Basic UI elements (buttons, cards, dialogs, forms, etc.)
+- **When to use**: Standard UI needs, most common components
+- **Examples**: Button, Card, Dialog, Input, Select, Table, Tabs
+
+### Animation & Visual Effects
+**Registries**: `@magicui`, `@aceternity`, `@motion-primitives`, `@animate-ui`
+- **Use for**: Animated components, visual effects, transitions
+- **When to use**: Need animations, hover effects, loading states, visual flair
+- **Examples**: Animated gradients, particle effects, scroll animations, motion components
+
+### Forms & Input
+**Registries**: `@formcn`, `@shadcn`
+- **Use for**: Form components, validation, input fields
+- **When to use**: Building forms, data entry, validation
+- **Examples**: Form builders, validated inputs, multi-step forms
+
+### Data Display
+**Registries**: `@shadcn`, `@blocks`, `@shadcnblocks`
+- **Use for**: Tables, lists, data visualization, dashboards
+- **When to use**: Displaying data, creating dashboards, data tables
+- **Examples**: Data tables, charts, lists, grids
+
+### AI & Chat Interfaces
+**Registries**: `@assistant-ui`, `@ai-elements`, `@prompt-kit`
+- **Use for**: AI chat interfaces, assistant UIs, prompt interfaces
+- **When to use**: Building AI features, chat interfaces, assistant tools
+- **Examples**: Chat interfaces, AI assistants, prompt builders
+
+### Supabase Integration
+**Registry**: `@supabase`
+- **Use for**: Supabase-specific UI components
+- **When to use**: Direct Supabase integration, auth UI, database UI
+- **Examples**: Auth components, database viewers, Supabase-specific widgets
+
+### Commerce & Payments
+**Registries**: `@commercn`, `@billingsdk`, `@paykit-sdk`
+- **Use for**: E-commerce, payments, billing, subscriptions
+- **When to use**: Building commerce features, payment flows, billing
+- **Examples**: Product cards, checkout flows, billing dashboards
+
+### Specialized Features
+- **`@clerk`**: Clerk authentication components
+- **`@algolia`**: Algolia search components
+- **`@plate`**: Rich text editor components
+- **`@prosekit`**: Prose editor components
+- **`@nuqs`**: URL state management components
+- **`@better-upload`**: File upload components
+- **`@blocks`**: Pre-built page sections and layouts
+
+### Premium/Advanced
+- **`@magicui-pro`**: Premium Magic UI components
+- **`@shadcn-studio`**: Advanced shadcn components
+- **`@creative-tim`**: Premium UI components
+
+## Component Selection Decision Process
+
+### Step 1: Identify the Use Case
+Ask: "What is the primary purpose of this component?"
+- Basic UI element → `@shadcn`
+- Animation/visual effect → `@magicui`, `@aceternity`
+- Form/input → `@formcn`, `@shadcn`
+- Data display → `@shadcn`, `@blocks`
+- AI/chat → `@assistant-ui`, `@ai-elements`
+- Supabase feature → `@supabase`
+- Commerce → `@commercn`, `@billingsdk`
+- Specialized need → Check specific registry
+
+### Step 2: Search for Component
+```bash
+# Search across all registries
+npx shadcn@latest add <component-name>
+
+# The CLI will show results from all registries
+```
+
+### Step 3: Evaluate Options
+- **Prefer official shadcn** (`@shadcn`) if available
+- **Use specialized registry** if it better fits the use case
+- **Check examples** in registry documentation
+- **Consider dependencies** - some registries may have additional deps
+
+### Step 4: Add Component
+```bash
+# Add from default registry
+npx shadcn@latest add button
+
+# Add from specific registry
+npx shadcn@latest add @magicui/animated-gradient
+npx shadcn@latest add @supabase/auth-form
+```
+
+## Registry Quick Reference
+
+| Use Case | Primary Registry | Alternative Registries |
+|----------|----------------|----------------------|
+| Basic button | `@shadcn` | - |
+| Animated button | `@magicui`, `@aceternity` | `@motion-primitives` |
+| Form input | `@shadcn`, `@formcn` | - |
+| Data table | `@shadcn` | `@blocks` |
+| AI chat | `@assistant-ui` | `@ai-elements` |
+| Auth UI | `@supabase` | `@clerk` |
+| File upload | `@better-upload` | `@shadcn` |
+| Rich text editor | `@plate` | `@prosekit` |
+| Search | `@algolia` | `@shadcn` |
+| Payment form | `@billingsdk` | `@commercn`, `@paykit-sdk` |
+| Page section | `@blocks` | `@shadcnblocks` |
+| Dashboard | `@blocks` | `@shadcn` |
+
+## Best Practices
+
+1. **Start with `@shadcn`** - It's the most stable and well-documented
+2. **Use specialized registries** when they provide better functionality
+3. **Check component dependencies** before adding
+4. **Review component code** after adding to understand customization options
+5. **Maintain consistency** - Don't mix too many different registries in one feature
+6. **Document registry choice** - Comment why a specific registry was chosen
+
+## Common Patterns
+
+### Adding a Component
+```bash
+# 1. Search first
+npx shadcn@latest add button
+
+# 2. If found, add it
+# 3. If not found, try specific registry
+npx shadcn@latest add @magicui/animated-button
+
+# 4. Import and use
+import { Button } from '@/components/ui/button'
+```
+
+### Customizing Components
+After adding, components are in `components/ui/`. You can:
+- Modify directly for project-specific needs
+- Extend with additional props
+- Create wrapper components
+- Add project-specific styling
+
+## Registry URLs
+
+All registries are configured in `components.json`. To see all available registries:
+```bash
+cat components.json | grep -A 100 '"registries"'
+```
+
+Or check the `components.json` file directly for the full list of 60+ registries.

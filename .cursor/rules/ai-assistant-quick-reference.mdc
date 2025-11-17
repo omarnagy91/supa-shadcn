@@ -1,0 +1,157 @@
+---
+description: Quick reference guide for AI assistants working with this template
+alwaysApply: true
+---
+
+# AI Assistant Quick Reference
+
+Quick reference guide for AI coding assistants working with this template.
+
+## Project Context
+
+- **Framework**: Next.js 16 (App Router) + React 19
+- **Backend**: Supabase (PostgreSQL, Auth, Storage, Realtime)
+- **UI**: shadcn/ui with 60+ registries
+- **Styling**: Tailwind CSS 4
+- **Package Manager**: pnpm (preferred)
+
+## Quick Commands
+
+```bash
+# Add component (searches all registries)
+npx shadcn@latest add <component-name>
+
+# Add from specific registry
+npx shadcn@latest add @magicui/animated-gradient
+
+# Generate Supabase types
+npx supabase gen types typescript --local > types/supabase.ts
+
+# Run dev server
+pnpm dev
+
+# Build project
+pnpm build
+```
+
+## File Locations
+
+- **Pages**: `app/` directory
+- **Components**: `components/` directory
+- **Utilities**: `lib/` directory
+- **Hooks**: `hooks/` directory
+- **Types**: `types/` directory
+- **Supabase client**: `lib/client.ts` (browser), `lib/server.ts` (server)
+
+## Component Selection
+
+1. **Basic UI** → `@shadcn` (default)
+2. **Animations** → `@magicui`, `@aceternity`, `@motion-primitives`
+3. **Forms** → `@formcn`, `@shadcn`
+4. **AI/Chat** → `@assistant-ui`, `@ai-elements`
+5. **Supabase** → `@supabase`
+6. **Commerce** → `@commercn`, `@billingsdk`
+
+See `.cursor/rules/component-registry-guide.mdc` for details.
+
+## Common Patterns
+
+### Server Component
+```tsx
+import { createClient } from '@/lib/server'
+
+export default async function Page() {
+  const supabase = await createClient()
+  const { data } = await supabase.from('table').select('*')
+  return <div>{/* render */}</div>
+}
+```
+
+### Client Component
+```tsx
+'use client'
+import { useState } from 'react'
+import { createClient } from '@/lib/client'
+
+export function Component() {
+  const [state, setState] = useState()
+  const supabase = createClient()
+  return <div>{/* render */}</div>
+}
+```
+
+### Using shadcn Components
+```tsx
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+```
+
+## Supabase Patterns
+
+### Query with Error Handling
+```tsx
+const { data, error } = await supabase
+  .from('table')
+  .select('*')
+  .eq('id', id)
+  .single()
+
+if (error) {
+  console.error(error)
+  return null
+}
+return data
+```
+
+### RLS Policies
+- Always enable RLS on new tables
+- Create separate policies for SELECT, INSERT, UPDATE, DELETE
+- Use `auth.uid()` for user-based policies
+- Add indexes on columns used in policies
+
+### Migrations
+- Format: `YYYYMMDDHHmmss_description.sql`
+- Enable RLS on new tables
+- Add comments explaining the migration
+
+## Import Aliases
+
+- `@/components` → `./components`
+- `@/lib` → `./lib`
+- `@/hooks` → `./hooks`
+- `@/types` → `./types`
+
+## Coding Standards
+
+- **TypeScript**: Explicit types, no `any`
+- **React**: Server Components by default, `'use client'` when needed
+- **Styling**: Tailwind utilities, `cn()` for conditional classes
+- **Database**: snake_case for tables/columns, RLS policies required
+
+## Important Rules
+
+1. **Always ensure project builds** before completing tasks
+2. **Check existing patterns** before creating new code
+3. **Use proper error handling** for Supabase queries
+4. **Follow file naming conventions** (PascalCase for components, camelCase for utils)
+5. **Select appropriate components** from available registries
+6. **Maintain consistency** with existing code patterns
+
+## Documentation Files
+
+- `.cursorrules` - Main project rules
+- `.cursor/rules/component-registry-guide.mdc` - Component selection
+- `.cursor/rules/project-structure.mdc` - File organization
+- `.cursor/rules/coding-standards.mdc` - Coding best practices
+- `.cursor/rules/create-migration.mdc` - Database migrations
+- `.cursor/rules/create-rls-policies.mdc` - RLS policies
+- `.cursor/rules/use-realtime.mdc` - Realtime patterns
+- `README.md` - Project overview
+
+## When in Doubt
+
+1. Check `.cursorrules` for project context
+2. Review `.cursor/rules/` for specific guidelines
+3. Look at existing code for patterns
+4. Search component registries before building custom
+5. Follow Supabase best practices from rules
