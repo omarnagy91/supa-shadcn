@@ -39,7 +39,7 @@ See `components.json` for the complete list.
 
 1. **Clone this template**:
    ```bash
-   git clone <your-template-repo-url> my-project
+   git clone https://github.com/omarnagy91/supa-shadcn my-project
    cd my-project
    ```
 
