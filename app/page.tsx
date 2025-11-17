@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Github, Sparkles, Database, Zap, Code, Rocket, CheckCircle2 } from "lucide-react"
+import { Github, Sparkles, Database, Zap, Code, Rocket, CheckCircle2, User, Globe, Linkedin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -55,8 +55,13 @@ export default function Home() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-              <Link href="https://github.com/omarnagy91/supa-shadcn#readme">
+              <Link href="/docs">
                 View Documentation
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+              <Link href="/examples">
+                See Examples
               </Link>
             </Button>
           </div>
@@ -215,15 +220,27 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap justify-center gap-4 pt-4">
                 <Button asChild variant="outline">
-                  <Link href="https://github.com/omarnagy91" target="_blank" rel="noopener noreferrer">
-                    <Github className="mr-2 h-4 w-4" />
-                    GitHub
+                  <Link href="/about">
+                    <User className="mr-2 h-4 w-4" />
+                    Learn More
                   </Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="https://github.com/omarnagy91/supa-shadcn" target="_blank" rel="noopener noreferrer">
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Template Repo
+                  <Link href="https://omargnagy.com" target="_blank" rel="noopener noreferrer">
+                    <Globe className="mr-2 h-4 w-4" />
+                    Portfolio
+                  </Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href="https://linkedin.com/in/omargnagy" target="_blank" rel="noopener noreferrer">
+                    <Linkedin className="mr-2 h-4 w-4" />
+                    LinkedIn
+                  </Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href="https://github.com/omarnagy91" target="_blank" rel="noopener noreferrer">
+                    <Github className="mr-2 h-4 w-4" />
+                    GitHub
                   </Link>
                 </Button>
               </div>
